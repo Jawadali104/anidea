@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ANIDEA ♡</title>
+    <style>
+        /* Modern System Sans-Serif Font Hierarchy */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            -webkit-tap-highlight-color: transparent; 
+        }
+        
+        body { 
+            /* Deep, vibrant Pink & Purple Mesh Gradient style */
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 0%, #e27aff 50%, #7028ff 100%); 
+            color: #222; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            height: 100vh; 
+            overflow: hidden; 
+            padding: 20px; 
+            gap: 15px;
+        }
+
+        .app-view {
+            background: rgba(255, 255, 255, 0.93); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px; 
+            height: 90vh; 
+            display: flex; 
+            flex-direction: column;
+            box-shadow: 0 16px 40px rgba(112, 40, 255, 0.2); 
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            overflow: hidden; 
+            position: relative;
+        }
+
+        #leftView { width: 300px; }
+        #centerView { flex: 1; max-width: 550px; }
+        #rightView { width: 340px; }
+        #cinemaView { width: 360px; }
+
+        .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.96); border-top: 1px solid #f0f0f0; padding: 10px 15px; justify-content: space-around; align-items: center; z-index: 999; }
+        .nav-item { border: none; background: none; font-size: 1.3rem; display: flex; flex-direction: column; align-items: center; gap: 3px; color: #8a7fa4; cursor: pointer; }
+        .nav-item.active { color: #d633ff; }
+        .nav-item span { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+
+        .sub-tab-menu { display: flex; background: #f3ebfa; border-radius: 12px; padding: 4px; gap: 4px; margin-bottom: 12px; width: 100%; }
+        .sub-tab-btn { flex: 1; border: none; background: none; padding: 8px; border-radius: 9px; font-weight: 700; color: #7c6e9f; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .sub-tab-btn.active { background: linear-gradient(135deg, #e27aff, #7028ff); color: white; }
+
+        .panel-block { flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+        .panel-block.active { display: flex; }
+
+        /* Unified Top Banners */
+        .countdown-banner { background: linear-gradient(135deg, #fa709a 0%, #b24eff 100%); color: #fff; padding: 12px; font-weight: 700; text-align: center; font-size: 0.9rem; letter-spacing: 0.5px; }
+
+        /* Chat Frame */
+        .chat-header { padding: 15px 20px; background: #fff; border-bottom: 1px solid #f2ecf7; width: 100%; }
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        .message { max-width: 80%; padding: 11px 16px; border-radius: 18px; font-size: 0.95rem; line-height: 1.4; word-wrap: break-word; font-weight: 500; }
+        .message.sent { background: linear-gradient(135deg, #e27aff 0%, #7028ff 100%); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .message.received { background: #fff; color: #333; align-self: flex-start; border: 1px solid #e27aff; border-bottom-left-radius: 4px; }
+        .message.sticker { background: none !important; border: none !important; font-size: 4rem; padding: 0; }
+
+        .chat-input-area { padding: 15px 20px; background: #fff; border-top: 1px solid #f2ecf7; position: relative; width: 100%; }
+        .input-wrapper { display: flex; align-items: center; background: #f7f3fc; border: 1px solid #eaddf5; border-radius: 20px; padding: 4px 12px; }
+        input { flex: 1; background: none; border: none; outline: none; padding: 8px; font-size: 0.95rem; color: #333; }
+        input::placeholder { color: #a496b8; }
+        .action-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; padding: 4px; color: #b24eff; }
+
+        .emoji-picker { position: absolute; bottom: 80px; left: 20px; right: 20px; height: 22vh; background: #fff; border: 1px solid #f0e6fa; border-radius: 16px; padding: 12px; box-shadow: 0 10px 30px rgba(112,40,255,0.15); display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; overflow-y: auto; visibility: hidden; opacity: 0; z-index: 10; transition: all 0.2s ease; }
+        .emoji-picker.active { visibility: visible; opacity: 1; }
+        .emoji-picker span { font-size: 1.8rem; cursor: pointer; text-align: center; transition: transform 0.1s; }
+        .emoji-picker span:active { transform: scale(1.3); }
+
+        /* Canvas Workspace */
+        #doodleCanvas { background: white; border: 2px solid #ebdcf7; border-radius: 16px; cursor: crosshair; display: block; }
+        .control-row { display: flex; gap: 8px; width: 100%; margin-top: 8px; padding: 0 5px; }
+        .control-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #dcbdf2; background: white; color: #7028ff; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: background 0.2s; }
+        .control-btn:active { background: #f7f0fc; }
+
+        /* Game Interfaces */
+        .game-status { font-weight: 700; color: #51446e; margin-bottom: 5px; font-size: 0.9rem; }
+        .tic-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 240px; aspect-ratio: 1; margin: 10px 0; }
+        .cell { background: #fcf8ff; border: 2px solid #ebdcf7; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; color: #b24eff; cursor: pointer; min-height: 70px; }
+        
+        .c4-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: #ebdcf7; padding: 8px; border-radius: 12px; width: 290px; margin: 10px 0; }
+        .c4-slot { aspect-ratio: 1; background: #fff; border-radius: 50%; cursor: pointer; transition: background 0.1s; }
+        .c4-slot.p1 { background: #e27aff; box-shadow: inset 0 0 6px rgba(0,0,0,0.05); }
+        .c4-slot.p2 { background: #7028ff; box-shadow: inset 0 0 6px rgba(0,0,0,0.05); }
+
+        /* Media Hub */
+        .cinema-wrapper { width: 100%; padding: 15px; display: flex; flex-direction: column; gap: 12px; height: 100%; overflow-y: auto; }
+        .video-screen { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 16px; overflow: hidden; }
+        .tiktok-screen { width: 100%; flex: 1; background: #fff; border-radius: 16px; display: flex; align-items: center; justify-content: center; overflow-y: auto; border: 1px solid #f0e6fa; max-height: 460px; }
+        .cinema-input { width: 100%; display: flex; gap: 8px; background: #fbf9fe; padding: 6px 12px; border-radius: 12px; border: 1px solid #ebdcf7; }
+
+        @media (max-width: 768px) {
+            body { padding: 0; }
+            .app-view { width: 100vw !important; height: 100vh !important; border-radius: 0; border: none; position: fixed; top: 0; left: 0; display: none; padding-bottom: 70px; }
+            .app-view.mobile-visible { display: flex; }
+            .mobile-nav { display: flex; }
+        }
+    </style>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script async src="https://www.tiktok.com/embed.js"></script>
+</head>
+<body>
+
+    <div class="app-view mobile-visible" id="leftView">
+        <div class="countdown-banner">ANIDEA Radio 🎵</div>
+        <div style="flex:1; width:100%; background:#222;">
+            <iframe style="border-radius:0;" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX10zKjOf7r7f?utm_source=generator&theme=0" width="100%" height="100%" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+        </div>
+    </div>
+
+    <div class="app-view" id="centerView">
+        <div class="countdown-banner" id="anniversaryClock">Syncing line... ♡</div>
+        <div class="chat-header">
+            <h3 style="font-weight: 700; color: #3b2d54; letter-spacing: -0.3px;">ANIDEA ♡</h3>
+            <p id="connection-status" style="font-size: 0.8rem; color: #8a7fa4; font-weight: 600;">Connecting...</p>
+        </div>
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-area">
+            <div class="emoji-picker" id="emojiPicker">
+                <span>💖</span><span>🥰</span><span>🥺</span><span>🧸</span><span>🌹</span><span>✨</span>
+                <span>🍿</span><span>🐱</span><span>🌙</span><span>💬</span><span>🍦</span><span>🎵</span>
+            </div>
+            <div class="input-wrapper">
+                <button class="action-btn" id="emojiToggleBtn">😊</button>
+                <input type="text" id="messageInput" placeholder="Write a message..." autocomplete="off">
+                <button class="action-btn send-btn" id="sendBtn">✦</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-view" id="rightView">
+        <div class="countdown-banner">Interaction Deck 🕹️</div>
+        <div style="padding: 15px; flex:1; display:flex; flex-direction:column; width:100%;">
+            <div class="sub-tab-menu">
+                <button class="sub-tab-btn active" onclick="switchRightFeature('doodleSub', this)">🎨 Doodle</button>
+                <button class="sub-tab-btn" onclick="switchRightFeature('gamesSub', this)">🎮 Games</button>
+            </div>
+
+            <div class="panel-block active" id="doodleSub">
+                <canvas id="doodleCanvas" width="300" height="380"></canvas>
+                <div class="control-row"><button class="control-btn" id="clearCanvasBtn">Wipe Pad</button></div>
+            </div>
+
+            <div class="panel-block" id="gamesSub">
+                <div class="sub-tab-menu" style="background: #fff; margin-bottom: 8px;">
+                    <button class="sub-tab-btn active" style="font-size:0.75rem;" onclick="switchActiveArcade('tictacLayout', this)">TicTacToe</button>
+                    <button class="sub-tab-btn" style="font-size:0.75rem;" onclick="switchActiveArcade('connectLayout', this)">Connect 4 🟣</button>
+                </div>
+                
+                <div id="tictacLayout" class="panel-block active">
+                    <div class="game-status" id="gameStatus">Syncing space...</div>
+                    <div class="tic-grid" id="ticGrid">
+                        <div class="cell" data-index="0"></div><div class="cell" data-index="1"></div><div class="cell" data-index="2"></div>
+                        <div class="cell" data-index="3"></div><div class="cell" data-index="4"></div><div class="cell" data-index="5"></div>
+                        <div class="cell" data-index="6"></div><div class="cell" data-index="7"></div><div class="cell" data-index="8"></div>
+                    </div>
+                    <button class="control-btn" id="resetGameBtn">Restart Board</button>
+                </div>
+
+                <div id="connectLayout" class="panel-block">
+                    <div class="game-status" id="c4Status">Connect 4 Loaded</div>
+                    <div class="c4-grid" id="c4Grid"></div>
+                    <button class="control-btn" id="resetC4Btn">Clear Grid</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-view" id="cinemaView">
+        <div class="countdown-banner">ANIDEA Cinema 📺</div>
+        <div class="cinema-wrapper">
+            <div class="sub-tab-menu">
+                <button class="sub-tab-btn active" id="ytTabBtn" onclick="switchCinemaMode('youtube')">🍿 YouTube</button>
+                <button class="sub-tab-btn" id="ttTabBtn" onclick="switchCinemaMode('tiktok')">📱 TikTok Feed</button>
+            </div>
+
+            <div id="youtubeMediaBlock" class="panel-block active">
+                <div class="video-screen"><div id="ytPlayer"></div></div>
+                <div class="cinema-input" style="margin-top:10px;">
+                    <input type="text" id="ytUrlInput" placeholder="Paste YouTube link...">
+                    <button class="control-btn" style="margin:0; width:70px;" id="loadVideoBtn">Load</button>
+                </div>
+            </div>
+
+            <div id="tiktokMediaBlock" class="panel-block">
+                <div class="tiktok-screen" id="tiktokPlayerContainer">
+                    <p style="color:#a496b8; font-size:0.85rem; text-align:center; padding:20px; font-weight:600;">No video loaded.<br>Paste a TikTok link below to sync your feed! ✨</p>
+                </div>
+                <div class="cinema-input" style="margin-top:10px;">
+                    <input type="text" id="ttUrlInput" placeholder="Paste TikTok Video Link...">
+                    <button class="control-btn" style="margin:0; width:70px;" id="loadTikTokBtn">Share</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mobile-nav">
+        <button class="nav-item active" onclick="switchMobileView('leftView', this)">🎵<span>Radio</span></button>
+        <button class="nav-item" onclick="switchMobileView('centerView', this)">💬<span>Chat</span></button>
+        <button class="nav-item" onclick="switchMobileView('rightView', this)">🕹️<span>Play</span></button>
+        <button class="nav-item" onclick="switchMobileView('cinemaView', this)">📺<span>Cinema</span></button>
+    </div>
+
+    <script>
+        const socket = io();
+        const chatMessages = document.getElementById('chatMessages');
+        const messageInput = document.getElementById('messageInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const emojiToggleBtn = document.getElementById('emojiToggleBtn');
+        const emojiPicker = document.getElementById('emojiPicker');
+        const statusText = document.getElementById('connection-status');
+
+        let myRole = '';
+
+        socket.on('assign-roles', (data) => {
+            myRole = data.role;
+            resetGamesToInitialState();
+        });
+
+        // --- 📅 COUNTER ---
+        const startDate = new Date(2025, 5, 17, 0, 0, 0);
+        function updateClock() {
+            const now = new Date();
+            const diff = Math.abs(now - startDate);
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('anniversaryClock').textContent = `Together for: ${days} Days, ${hrs}h, and ${mins}m ♡`;
+        }
+        setInterval(updateClock, 1000); updateClock();
+
+        // Responsive Switching logic
+        function switchMobileView(vId, btn) { document.querySelectorAll('.app-view').forEach(v=>v.classList.remove('mobile-visible')); document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active')); document.getElementById(vId).classList.add('mobile-visible'); btn.classList.add('active'); }
+        function switchRightFeature(sId, btn) { document.querySelectorAll('#rightView .panel-block').forEach(p=>p.classList.remove('active')); document.querySelectorAll('#rightView .sub-tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(sId).classList.add('active'); btn.classList.add('active'); }
+        function switchActiveArcade(lId, btn) { document.getElementById('gamesSub').querySelectorAll('.panel-block').forEach(p=>p.classList.remove('active')); btn.parentNode.querySelectorAll('.sub-tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(lId).classList.add('active'); btn.classList.add('active'); }
+
+        function switchCinemaMode(mode) {
+            document.getElementById('youtubeMediaBlock').classList.remove('active');
+            document.getElementById('tiktokMediaBlock').classList.remove('active');
+            document.getElementById('ytTabBtn').classList.remove('active');
+            document.getElementById('ttTabBtn').classList.remove('active');
+
+            if(mode === 'youtube') {
+                document.getElementById('youtubeMediaBlock').classList.add('active');
+                document.getElementById('ytTabBtn').classList.add('active');
+            } else {
+                document.getElementById('tiktokMediaBlock').classList.add('active');
+                document.getElementById('ttTabBtn').classList.add('active');
+            }
+        }
+
+        // --- 🎨 LOCAL RADIAL COORDINATE DOODLE ENGINE ---
+        const canvas = document.getElementById('doodleCanvas');
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+        ctx.strokeStyle = '#b24eff'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+
+        function getCoords(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: clientX - rect.left, y: clientY - rect.top };
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            drawing = true; const p = getCoords(e);
+            ctx.beginPath(); ctx.moveTo(p.x, p.y); socket.emit('start-drawing', p);
+        });
+        canvas.addEventListener('mousemove', (e) => {
+            if (!drawing) return; e.preventDefault();
+            const p = getCoords(e); ctx.lineTo(p.x, p.y); ctx.stroke(); socket.emit('drawing', p);
+        });
+        canvas.addEventListener('mouseup', () => drawing = false);
+        canvas.addEventListener('touchstart', (e) => {
+            drawing = true; const p = getCoords(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); socket.emit('start-drawing', p);
+        }, {passive:false});
+        canvas.addEventListener('touchmove', (e) => {
+            if (!drawing) return; e.preventDefault(); const p = getCoords(e); ctx.lineTo(p.x, p.y); ctx.stroke(); socket.emit('drawing', p);
+        }, {passive:false});
+        canvas.addEventListener('touchend', () => drawing = false);
+
+        socket.on('start-drawing', (p) => { ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+        socket.on('drawing', (p) => { ctx.lineTo(p.x, p.y); ctx.stroke(); });
+        document.getElementById('clearCanvasBtn').addEventListener('click', () => socket.emit('clear-canvas'));
+        socket.on('clear-canvas', () => ctx.clearRect(0, 0, canvas.width, canvas.height));
+
+        // --- 🎮 SYNCED TIC TAC TOE ---
+        const cells = document.querySelectorAll('.cell');
+        const gameStatus = document.getElementById('gameStatus');
+        let tttBoard = ["", "", "", "", "", "", "", "", ""];
+        let currentTTTTurn = 'creator';
+
+        cells.forEach(cell => {
+            cell.addEventListener('click', () => {
+                const idx = cell.getAttribute('data-index');
+                if (currentTTTTurn !== myRole || tttBoard[idx] !== "") return;
+                const sign = myRole === 'creator' ? 'X' : 'O';
+                executeTTTMove(idx, sign);
+                socket.emit('game-move', { idx, sign });
+            });
+        });
+
+        function executeTTTMove(idx, sign) {
+            tttBoard[idx] = sign; cells[idx].textContent = sign;
+            currentTTTTurn = currentTTTTurn === 'creator' ? 'joiner' : 'creator';
+            updateGameStatusTexts(); checkTTTWin();
+        }
+        socket.on('game-move', (data) => { executeTTTMove(data.idx, data.sign); });
+        document.getElementById('resetGameBtn').addEventListener('click', () => socket.emit('game-reset'));
+        socket.on('game-reset', () => { tttBoard.fill(""); cells.forEach(c => c.textContent = ""); currentTTTTurn = 'creator'; updateGameStatusTexts(); });
+
+        // --- 🟣 SYNCED CONNECT 4 ---
+        const c4Grid = document.getElementById('c4Grid');
+        const c4Status = document.getElementById('c4Status');
+        let c4Board = Array(6).fill().map(() => Array(7).fill(""));
+        let currentC4Turn = 'creator';
+
+        function renderC4() {
+            c4Grid.innerHTML = "";
+            for (let r = 0; r < 6; r++) {
+                for (let c = 0; c < 7; c++) {
+                    const s = document.createElement('div'); s.classList.add('c4-slot');
+                    if (c4Board[r][c] === 'R') s.classList.add('p1');
+                    if (c4Board[r][c] === 'Y') s.classList.add('p2');
+                    s.addEventListener('click', () => handleC4ColumnClick(c));
+                    c4Grid.appendChild(s);
+                }
+            }
+        }
+
+        function handleC4ColumnClick(col) {
+            if (currentC4Turn !== myRole) return;
+            for (let r = 5; r >= 0; r--) {
+                if (c4Board[r][col] === "") {
+                    const color = myRole === 'creator' ? 'R' : 'Y';
+                    executeC4Move(r, col, color); socket.emit('c4-move', { r, col, color });
+                    break;
+                }
+            }
+        }
+
+        function executeC4Move(r, col, color) {
+            c4Board[r][col] = color; renderC4();
+            currentC4Turn = currentC4Turn === 'creator' ? 'joiner' : 'creator';
+            updateGameStatusTexts(); checkC4Win();
+        }
+        socket.on('c4-move', (data) => { executeC4Move(data.r, data.col, data.color); });
+        document.getElementById('resetC4Btn').addEventListener('click', () => socket.emit('c4-reset'));
+        socket.on('c4-reset', () => { c4Board = Array(6).fill().map(() => Array(7).fill("")); renderC4(); currentC4Turn = 'creator'; updateGameStatusTexts(); });
+
+        function updateGameStatusTexts() {
+            gameStatus.textContent = currentTTTTurn === myRole ? "Your Turn! 🎮" : "Their Turn...";
+            c4Status.textContent = currentC4Turn === myRole ? "Your Turn! 🟣" : "Their Turn...";
+        }
+        function resetGamesToInitialState() {
+            tttBoard.fill(""); cells.forEach(c => c.textContent = ""); currentTTTTurn = 'creator';
+            c4Board = Array(6).fill().map(() => Array(7).fill("")); renderC4(); currentC4Turn = 'creator';
+            updateGameStatusTexts();
+        }
+        function checkTTTWin() {
+            const pat = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+            for (let p of pat) { if (tttBoard[p[0]] && tttBoard[p[0]] === tttBoard[p[1]] && tttBoard[p[0]] === tttBoard[p[2]]) { gameStatus.textContent = (tttBoard[p[0]] === 'X' ? 'creator' : 'joiner') === myRole ? "You Win! 🏆" : "They Won! 💕"; currentTTTTurn = 'game-over'; } }
+        }
+        function checkC4Win() {
+            for (let r=0; r<6; r++) { for (let c=0; c<4; c++) { if(c4Board[r][c] && c4Board[r][c]===c4Board[r][c+1] && c4Board[r][c]===c4Board[r][c+2] && c4Board[r][c]===c4Board[r][c+3]) { declareC4W(c4Board[r][c]); } } }
+            for (let r=0; r<3; r++) { for (let c=0; c<7; c++) { if(c4Board[r][c] && c4Board[r][c]===c4Board[r+1][c] && c4Board[r][c]===c4Board[r+2][c] && c4Board[r][c]===c4Board[r+3][c]) { declareC4W(c4Board[r][c]); } } }
+            for (let r=0; r<3; r++) { for (let c=0; c<4; c++) { if(c4Board[r][c] && c4Board[r][c]===c4Board[r+1][c+1] && c4Board[r][c]===c4Board[r+2][c+2] && c4Board[r][c]===c4Board[r+3][c+3]) { declareC4W(c4Board[r][c]); } } }
+            for (let r=3; r<6; r++) { for (let c=0; c<4; c++) { if(c4Board[r][c] && c4Board[r][c]===c4Board[r-1][c+1] && c4Board[r][c]===c4Board[r-2][c+2] && c4Board[r][c]===c4Board[r-3][c+3]) { declareC4W(c4Board[r][c]); } } }
+        }
+        function declareC4W(color) { c4Status.textContent = (color === 'R' ? 'creator' : 'joiner') === myRole ? "You Win! 🏆" : "They Won! 💕"; currentC4Turn = 'game-over'; }
+
+        // --- 📺 YOUTUBE RUNTIMES ---
+        let player; let ignoreNextSync = false;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('ytPlayer', { height: '100%', width: '100%', videoId: 'dQw4w9WgXcQ', playerVars: { 'playsinline': 1, 'controls': 1 }, events: { 'onStateChange': onPlayerStateChange } });
+        }
+        document.getElementById('loadVideoBtn').addEventListener('click', () => {
+            const url = document.getElementById('ytUrlInput').value.trim(); if(!url) return;
+            const match = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/); const id = (match && match[2].length === 11) ? match[2] : null;
+            if(id) { player.loadVideoById(id); socket.emit('cinema-control', { type: 'youtube', action: 'load', id }); }
+        });
+        function onPlayerStateChange(e) {
+            if (ignoreNextSync) { ignoreNextSync = false; return; }
+            if (e.data == YT.PlayerState.PLAYING) socket.emit('cinema-control', { type: 'youtube', action: 'play', time: player.getCurrentTime() });
+            if (e.data == YT.PlayerState.PAUSED) socket.emit('cinema-control', { type: 'youtube', action: 'pause', time: player.getCurrentTime() });
+        }
+
+        // --- 📱 TIKTOK RUNTIMES ---
+        document.getElementById('loadTikTokBtn').addEventListener('click', () => {
+            const url = document.getElementById('ttUrlInput').value.trim(); if(!url) return;
+            const videoId = extractTikTokId(url);
+            if(videoId) { renderTikTokEmbed(videoId); socket.emit('cinema-control', { type: 'tiktok', id: videoId }); }
+        });
+        function extractTikTokId(url) {
+            const matches = url.match(/\/video\/(\d+)/) || url.match(/v\/(\d+)/); if(matches && matches[1]) return matches[1];
+            const shortMatch = url.match(/tiktok\.com\/@[\w\.-]+\/video\/(\d+)/); return shortMatch ? shortMatch[1] : null;
+        }
+        function renderTikTokEmbed(videoId) {
+            const container = document.getElementById('tiktokPlayerContainer');
+            container.innerHTML = `<blockquote class="tiktok-embed" data-video-id="${videoId}" style="max-width: 325px; min-width: 288px; margin:0 auto;"><section><a target="_blank" href="https://www.tiktok.com/video/${videoId}">Loading shared link...</a></section></blockquote>`;
+            if (window.tiktokEmbed) window.tiktokEmbed.render();
+        }
+
+        // Cinema Decode Nodes
+        socket.on('cinema-control', (data) => {
+            if(data.type === 'youtube') {
+                switchCinemaMode('youtube'); ignoreNextSync = true;
+                if (data.action === 'load') player.loadVideoById(data.id);
+                if (data.action === 'play') { player.seekTo(data.time, true); player.playVideo(); }
+                if (data.action === 'pause') { player.seekTo(data.time, true); player.pauseVideo(); }
+            } else if (data.type === 'tiktok') {
+                switchCinemaMode('tiktok'); renderTikTokEmbed(data.id);
+            }
+        });
+
+        // --- CORE CHAT ROUTERS ---
+        socket.on('connect', () => { statusText.textContent = "Line Active"; statusText.style.color="#b24eff"; });
+        function sendText() {
+            const text = messageInput.value.trim(); if (!text) return;
+            socket.emit('chat-message', { type: 'text', text, id: socket.id });
+            messageInput.value = ''; emojiPicker.classList.remove('active');
+        }
+        sendBtn.addEventListener('click', sendText);
+        messageInput.addEventListener('keypress', (e) => { if(e.key==='Enter') sendText(); });
+        emojiToggleBtn.addEventListener('click', () => emojiPicker.classList.toggle('active'));
+        emojiPicker.addEventListener('click', (e) => { if(e.target.tagName === 'SPAN') { socket.emit('chat-message', { type: 'sticker', text: e.target.textContent, id: socket.id }); emojiPicker.classList.remove('active'); } });
+        socket.on('chat-message', (data) => {
+            const c = data.id === socket.id ? 'sent' : 'received'; const m = document.createElement('div'); m.classList.add('message', c);
+            if(data.type==='sticker') m.classList.add('sticker'); m.textContent = data.text; chatMessages.appendChild(m); chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
+    </script>
+</body>
+</html>
