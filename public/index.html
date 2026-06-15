@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ANIDEA ♡</title>
     <style>
-        /* Modern System Sans-Serif Font Hierarchy */
+        /* Modern Clean System Sans-Serif Typography */
         * { 
             margin: 0; 
             padding: 0; 
@@ -15,98 +15,243 @@
         }
         
         body { 
-            /* Deep, vibrant Pink & Purple Mesh Gradient style */
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 0%, #e27aff 50%, #7028ff 100%); 
-            color: #222; 
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 35%, #e27aff 70%, #a1c4fd 100%); 
+            color: #333; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             height: 100vh; 
             overflow: hidden; 
-            padding: 20px; 
-            gap: 15px;
-        }
-
-        .app-view {
-            background: rgba(255, 255, 255, 0.93); 
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: 24px; 
-            height: 90vh; 
-            display: flex; 
-            flex-direction: column;
-            box-shadow: 0 16px 40px rgba(112, 40, 255, 0.2); 
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            overflow: hidden; 
+            padding: 10px;
             position: relative;
         }
 
-        #leftView { width: 300px; }
-        #centerView { flex: 1; max-width: 550px; }
-        #rightView { width: 340px; }
-        #cinemaView { width: 360px; }
+        /* Side Quick-Deck Trigger Button Columns */
+        .side-trigger-deck {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 100;
+            padding: 10px;
+        }
+        #leftTriggerDeck { order: 1; }
+        #rightTriggerDeck { order: 3; }
 
-        .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.96); border-top: 1px solid #f0f0f0; padding: 10px 15px; justify-content: space-around; align-items: center; z-index: 999; }
-        .nav-item { border: none; background: none; font-size: 1.3rem; display: flex; flex-direction: column; align-items: center; gap: 3px; color: #8a7fa4; cursor: pointer; }
-        .nav-item.active { color: #d633ff; }
-        .nav-item span { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .deck-btn {
+            background: rgba(255, 240, 245, 0.9);
+            border: 1px solid rgba(255, 182, 193, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.15);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .deck-btn:active, .deck-btn.active {
+            transform: scale(0.92);
+            background: linear-gradient(135deg, #ff69b4, #e27aff);
+            color: white !important;
+            border-color: transparent;
+        }
 
-        .sub-tab-menu { display: flex; background: #f3ebfa; border-radius: 12px; padding: 4px; gap: 4px; margin-bottom: 12px; width: 100%; }
-        .sub-tab-btn { flex: 1; border: none; background: none; padding: 8px; border-radius: 9px; font-weight: 700; color: #7c6e9f; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
-        .sub-tab-btn.active { background: linear-gradient(135deg, #e27aff, #7028ff); color: white; }
+        /* Core Stage Hub Wrapper */
+        .stage-container {
+            flex: 1;
+            max-width: 600px;
+            height: 92vh;
+            display: flex;
+            position: relative;
+            order: 2;
+            gap: 0;
+        }
+
+        /* Main Chat Window Block (Romantic Pink Frosted Centerpiece) */
+        .app-view-center {
+            flex: 1;
+            background: rgba(255, 245, 247, 0.95); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-radius: 24px; 
+            display: flex; 
+            flex-direction: column;
+            box-shadow: 0 16px 40px rgba(255, 42, 116, 0.15); 
+            border: 1px solid rgba(255, 182, 193, 0.5);
+            overflow: hidden; 
+            z-index: 10;
+        }
+
+        /* Slide-Out Side Drawer Panels (Radio, Cinema, Doodle, Games) */
+        .drawer-view {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 248, 249, 0.98);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-radius: 24px;
+            box-shadow: 0 16px 40px rgba(255, 42, 116, 0.15);
+            border: 1px solid rgba(255, 182, 193, 0.6);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s;
+            opacity: 0;
+            pointer-events: none;
+        }
+        /* Left sliding drawers */
+        .drawer-left { transform: translateX(-100%); left: 0; }
+        /* Right sliding drawers */
+        .drawer-right { transform: translateX(100%); right: 0; }
+
+        .drawer-view.open {
+            transform: translateX(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer-close-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            background: #fff5f7;
+            border-bottom: 1px solid #ffe3e8;
+        }
+        .close-drawer-btn {
+            background: #ffe3e8; border: none; padding: 6px 12px; font-weight: 700; border-radius: 8px; color: #ff4081; cursor: pointer; font-size: 0.8rem;
+        }
+
+        .sub-tab-menu { display: flex; background: #ffe3e8; border-radius: 12px; padding: 4px; gap: 4px; margin-bottom: 12px; width: 100%; }
+        .sub-tab-btn { flex: 1; border: none; background: none; padding: 8px; border-radius: 9px; font-weight: 700; color: #a3727e; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .sub-tab-btn.active { background: linear-gradient(135deg, #ff69b4, #b24eff); color: white; }
 
         .panel-block { flex: 1; display: none; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
         .panel-block.active { display: flex; }
 
-        /* Unified Top Banners */
-        .countdown-banner { background: linear-gradient(135deg, #fa709a 0%, #b24eff 100%); color: #fff; padding: 12px; font-weight: 700; text-align: center; font-size: 0.9rem; letter-spacing: 0.5px; }
+        /* Banner Accents */
+        .countdown-banner { background: linear-gradient(135deg, #ff4e50 0%, #ff2a74 100%); color: #fff; padding: 12px; font-weight: 700; text-align: center; font-size: 0.9rem; letter-spacing: 0.5px; }
 
-        /* Chat Frame */
-        .chat-header { padding: 15px 20px; background: #fff; border-bottom: 1px solid #f2ecf7; width: 100%; }
-        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        /* Unified Chat Engine */
+        .chat-header { padding: 15px 20px; background: rgba(255, 255, 255, 0.6); border-bottom: 1px solid #ffe3e8; width: 100%; }
+        .chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; width: 100%; background: rgba(255, 240, 245, 0.4); }
         .message { max-width: 80%; padding: 11px 16px; border-radius: 18px; font-size: 0.95rem; line-height: 1.4; word-wrap: break-word; font-weight: 500; }
-        .message.sent { background: linear-gradient(135deg, #e27aff 0%, #7028ff 100%); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .message.received { background: #fff; color: #333; align-self: flex-start; border: 1px solid #e27aff; border-bottom-left-radius: 4px; }
-        .message.sticker { background: none !important; border: none !important; font-size: 4rem; padding: 0; }
+        .message.sent { background: linear-gradient(135deg, #ff65a3 0%, #b24eff 100%); color: #fff; align-self: flex-end; border-bottom-right-radius: 4px; box-shadow: 0 2px 8px rgba(210, 50, 120, 0.15); }
+        .message.received { background: #ffffff; color: #5a2e38; align-self: flex-start; border: 1px solid #ffb6c1; border-bottom-left-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+        .message.sticker { background: none !important; border: none !important; font-size: 4rem; padding: 0; box-shadow: none; }
 
-        .chat-input-area { padding: 15px 20px; background: #fff; border-top: 1px solid #f2ecf7; position: relative; width: 100%; }
-        .input-wrapper { display: flex; align-items: center; background: #f7f3fc; border: 1px solid #eaddf5; border-radius: 20px; padding: 4px 12px; }
-        input { flex: 1; background: none; border: none; outline: none; padding: 8px; font-size: 0.95rem; color: #333; }
-        input::placeholder { color: #a496b8; }
-        .action-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; padding: 4px; color: #b24eff; }
+        .chat-input-area { padding: 15px 20px; background: rgba(255, 255, 255, 0.8); border-top: 1px solid #ffe3e8; position: relative; width: 100%; }
+        .input-wrapper { display: flex; align-items: center; background: #fff0f3; border: 1px solid #ffd0d8; border-radius: 20px; padding: 4px 12px; }
+        input { flex: 1; background: none; border: none; outline: none; padding: 8px; font-size: 0.95rem; color: #444; }
+        .action-btn { background: none; border: none; font-size: 1.4rem; cursor: pointer; padding: 4px; color: #ff527b; }
 
-        .emoji-picker { position: absolute; bottom: 80px; left: 20px; right: 20px; height: 22vh; background: #fff; border: 1px solid #f0e6fa; border-radius: 16px; padding: 12px; box-shadow: 0 10px 30px rgba(112,40,255,0.15); display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; overflow-y: auto; visibility: hidden; opacity: 0; z-index: 10; transition: all 0.2s ease; }
+        .emoji-picker { position: absolute; bottom: 80px; left: 20px; right: 20px; height: 22vh; background: #fff; border: 1px solid #ffd0d8; border-radius: 16px; padding: 12px; box-shadow: 0 10px 30px rgba(255,64,129,0.15); display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; overflow-y: auto; visibility: hidden; opacity: 0; z-index: 30; transition: all 0.2s ease; }
         .emoji-picker.active { visibility: visible; opacity: 1; }
-        .emoji-picker span { font-size: 1.8rem; cursor: pointer; text-align: center; transition: transform 0.1s; }
-        .emoji-picker span:active { transform: scale(1.3); }
+        .emoji-picker span { font-size: 1.8rem; cursor: pointer; text-align: center; }
 
-        /* Canvas Workspace */
-        #doodleCanvas { background: white; border: 2px solid #ebdcf7; border-radius: 16px; cursor: crosshair; display: block; }
+        /* Interactive Canvas Node */
+        #doodleCanvas { background: white; border: 2px solid #ffd0d8; border-radius: 16px; cursor: crosshair; display: block; }
         .control-row { display: flex; gap: 8px; width: 100%; margin-top: 8px; padding: 0 5px; }
-        .control-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #dcbdf2; background: white; color: #7028ff; font-weight: 700; cursor: pointer; font-size: 0.85rem; transition: background 0.2s; }
-        .control-btn:active { background: #f7f0fc; }
+        .control-btn { flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #ffccd5; background: white; color: #ff4081; font-weight: 700; cursor: pointer; font-size: 0.85rem; }
 
-        /* Game Interfaces */
-        .game-status { font-weight: 700; color: #51446e; margin-bottom: 5px; font-size: 0.9rem; }
-        .tic-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 240px; aspect-ratio: 1; margin: 10px 0; }
-        .cell { background: #fcf8ff; border: 2px solid #ebdcf7; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; color: #b24eff; cursor: pointer; min-height: 70px; }
+        /* Game Grids */
+        .game-status { font-weight: 700; color: #7d4451; margin-bottom: 5px; font-size: 0.9rem; }
+        .tic-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; width: 230px; aspect-ratio: 1; margin: 10px 0; }
+        .cell { background: #fffafb; border: 2px solid #ffd0d8; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; color: #ff527b; cursor: pointer; }
         
-        .c4-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: #ebdcf7; padding: 8px; border-radius: 12px; width: 290px; margin: 10px 0; }
-        .c4-slot { aspect-ratio: 1; background: #fff; border-radius: 50%; cursor: pointer; transition: background 0.1s; }
-        .c4-slot.p1 { background: #e27aff; box-shadow: inset 0 0 6px rgba(0,0,0,0.05); }
-        .c4-slot.p2 { background: #7028ff; box-shadow: inset 0 0 6px rgba(0,0,0,0.05); }
+        .c4-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; background: #ffe3e8; padding: 8px; border-radius: 12px; width: 260px; margin: 10px 0; }
+        .c4-slot { aspect-ratio: 1; background: #fff; border-radius: 50%; cursor: pointer; }
+        .c4-slot.p1 { background: #ff65a3; }
+        .c4-slot.p2 { background: #b24eff; }
 
-        /* Media Hub */
+        /* Cinema Frameworks */
         .cinema-wrapper { width: 100%; padding: 15px; display: flex; flex-direction: column; gap: 12px; height: 100%; overflow-y: auto; }
         .video-screen { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 16px; overflow: hidden; }
-        .tiktok-screen { width: 100%; flex: 1; background: #fff; border-radius: 16px; display: flex; align-items: center; justify-content: center; overflow-y: auto; border: 1px solid #f0e6fa; max-height: 460px; }
-        .cinema-input { width: 100%; display: flex; gap: 8px; background: #fbf9fe; padding: 6px 12px; border-radius: 12px; border: 1px solid #ebdcf7; }
+        .tiktok-screen { width: 100%; flex: 1; background: #fff; border-radius: 16px; display: flex; align-items: center; justify-content: center; overflow-y: auto; border: 1px solid #ffd0d8; max-height: 400px; }
+        .cinema-input { width: 100%; display: flex; gap: 8px; background: #fffafb; padding: 6px 12px; border-radius: 12px; border: 1px solid #ffd0d8; }
 
+        /* --- 🎆 OVERLAY & EXTRA EXTRA ALIVE VISUALS --- */
+        #celebrationOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(8, 4, 20, 0.96);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #celebrationOverlay.visible {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        #fireworksCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .celebration-text {
+            position: relative;
+ z-index: 10;
+            text-align: center;
+            color: #fff;
+            animation: floatingGlow 2s ease-in-out infinite alternate;
+            padding: 25px;
+        }
+        .celebration-text h1 {
+            font-size: 4rem;
+            background: linear-gradient(45deg, #ff2a74, #fee140, #00f5ff, #e27aff, #ff2a74);
+            background-size: 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900;
+            margin-bottom: 15px;
+            letter-spacing: -1.5px;
+            animation: gradientShift 3s linear infinite;
+        }
+        .celebration-text p {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f6f0ff;
+            text-shadow: 0 0 25px rgba(0, 245, 255, 0.8), 0 0 10px rgba(226, 122, 255, 0.5);
+        }
+
+        @keyframes floatingGlow {
+            0% { transform: translateY(0px) scale(1); filter: drop-shadow(0 0 15px rgba(255, 42, 116, 0.5)); }
+            100% { transform: translateY(-15px) scale(1.05); filter: drop-shadow(0 0 40px rgba(0, 253, 255, 0.9)); }
+        }
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Mobile Optimization Rules */
         @media (max-width: 768px) {
-            body { padding: 0; }
-            .app-view { width: 100vw !important; height: 100vh !important; border-radius: 0; border: none; position: fixed; top: 0; left: 0; display: none; padding-bottom: 70px; }
-            .app-view.mobile-visible { display: flex; }
-            .mobile-nav { display: flex; }
+            body { padding: 5px; }
+            .side-trigger-deck { position: fixed; bottom: 15px; display: flex; flex-direction: row; gap: 10px; width: auto; padding: 0; }
+            #leftTriggerDeck { left: 15px; }
+            #rightTriggerDeck { right: 15px; }
+            .deck-btn { width: 44px; height: 44px; font-size: 1.2rem; border-radius: 12px; }
+            .stage-container { width: 100%; max-width: 100%; height: 84vh; margin-bottom: 75px; }
+            .celebration-text h1 { font-size: 2.6rem; }
+            .celebration-text p { font-size: 1.2rem; }
         }
     </style>
     <script src="/socket.io/socket.io.js"></script>
@@ -115,48 +260,98 @@
 </head>
 <body>
 
-    <div class="app-view mobile-visible" id="leftView">
-        <div class="countdown-banner">ANIDEA Radio 🎵</div>
-        <div style="flex:1; width:100%; background:#222;">
-            <iframe style="border-radius:0;" src="https://open.spotify.com/embed/playlist/37i9dQZF1DX10zKjOf7r7f?utm_source=generator&theme=0" width="100%" height="100%" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    <div id="celebrationOverlay">
+        <canvas id="fireworksCanvas"></canvas>
+        <div class="celebration-text">
+            <h1>Happy Anniversary Aams! 💖</h1>
+            <p id="celebrationSubtitle">Together forever ♡</p>
         </div>
     </div>
 
-    <div class="app-view" id="centerView">
-        <div class="countdown-banner" id="anniversaryClock">Syncing line... ♡</div>
-        <div class="chat-header">
-            <h3 style="font-weight: 700; color: #3b2d54; letter-spacing: -0.3px;">ANIDEA ♡</h3>
-            <p id="connection-status" style="font-size: 0.8rem; color: #8a7fa4; font-weight: 600;">Connecting...</p>
-        </div>
-        <div class="chat-messages" id="chatMessages"></div>
-        <div class="chat-input-area">
-            <div class="emoji-picker" id="emojiPicker">
-                <span>💖</span><span>🥰</span><span>🥺</span><span>🧸</span><span>🌹</span><span>✨</span>
-                <span>🍿</span><span>🐱</span><span>🌙</span><span>💬</span><span>🍦</span><span>🎵</span>
-            </div>
-            <div class="input-wrapper">
-                <button class="action-btn" id="emojiToggleBtn">😊</button>
-                <input type="text" id="messageInput" placeholder="Write a message..." autocomplete="off">
-                <button class="action-btn send-btn" id="sendBtn">✦</button>
-            </div>
-        </div>
+    <div class="side-trigger-deck" id="leftTriggerDeck">
+        <button class="deck-btn" onclick="toggleDrawer('radioDrawer', this)">🎵</button>
+        <button class="deck-btn" onclick="toggleDrawer('cinemaDrawer', this)">📺</button>
     </div>
 
-    <div class="app-view" id="rightView">
-        <div class="countdown-banner">Interaction Deck 🕹️</div>
-        <div style="padding: 15px; flex:1; display:flex; flex-direction:column; width:100%;">
-            <div class="sub-tab-menu">
-                <button class="sub-tab-btn active" onclick="switchRightFeature('doodleSub', this)">🎨 Doodle</button>
-                <button class="sub-tab-btn" onclick="switchRightFeature('gamesSub', this)">🎮 Games</button>
+    <div class="stage-container">
+        
+        <div class="app-view-center">
+            <div class="countdown-banner" id="anniversaryClock">Syncing line... ♡</div>
+            <div class="chat-header">
+                <h3 style="font-weight: 700; color: #5a2e38; letter-spacing: -0.3px;">ANIDEA ♡</h3>
+                <p id="connection-status" style="font-size: 0.8rem; color: #a3727e; font-weight: 600;">Connecting...</p>
             </div>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-area">
+                <div class="emoji-picker" id="emojiPicker">
+                    <span>💖</span><span>🥰</span><span>🥺</span><span>🧸</span><span>🌹</span><span>✨</span>
+                    <span>🍿</span><span>🐱</span><span>🌙</span><span>💬</span><span>🍦</span><span>🎵</span>
+                </div>
+                <div class="input-wrapper">
+                    <button class="action-btn" id="emojiToggleBtn">😊</button>
+                    <input type="text" id="messageInput" placeholder="Write a message..." autocomplete="off">
+                    <button class="action-btn send-btn" id="sendBtn">✦</button>
+                </div>
+            </div>
+        </div>
 
-            <div class="panel-block active" id="doodleSub">
-                <canvas id="doodleCanvas" width="300" height="380"></canvas>
+        <div class="drawer-view drawer-left" id="radioDrawer">
+            <div class="drawer-close-header">
+                <h4 style="color:#5a2e38;">ANIDEA Radio</h4>
+                <button class="close-drawer-btn" onclick="closeAllDrawers()">Hide ×</button>
+            </div>
+            <div style="flex:1; width:100%; background:#111;">
+                <iframe width="100%" height="100%" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/playlists/475471413&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true"></iframe>
+            </div>
+        </div>
+
+        <div class="drawer-view drawer-left" id="cinemaDrawer">
+            <div class="drawer-close-header">
+                <h4 style="color:#5a2e38;">Shared Cinema</h4>
+                <button class="close-drawer-btn" onclick="closeAllDrawers()">Hide ×</button>
+            </div>
+            <div class="cinema-wrapper">
+                <div class="sub-tab-menu">
+                    <button class="sub-tab-btn active" id="ytTabBtn" onclick="switchCinemaMode('youtube')">🍿 YouTube</button>
+                    <button class="sub-tab-btn" id="ttTabBtn" onclick="switchCinemaMode('tiktok')">📱 TikTok Feed</button>
+                </div>
+                <div id="youtubeMediaBlock" class="panel-block active">
+                    <div class="video-screen"><div id="ytPlayer"></div></div>
+                    <div class="cinema-input" style="margin-top:10px;">
+                        <input type="text" id="ytUrlInput" placeholder="Paste YouTube link...">
+                        <button class="control-btn" style="margin:0; width:70px;" id="loadVideoBtn">Load</button>
+                    </div>
+                </div>
+                <div id="tiktokMediaBlock" class="panel-block">
+                    <div class="tiktok-screen" id="tiktokPlayerContainer">
+                        <p style="color:#a3727e; font-size:0.85rem; text-align:center; padding:20px; font-weight:600;">No video loaded.<br>Paste a TikTok link below to sync your feed!</p>
+                    </div>
+                    <div class="cinema-input" style="margin-top:10px;">
+                        <input type="text" id="ttUrlInput" placeholder="Paste TikTok video link...">
+                        <button class="control-btn" style="margin:0; width:70px;" id="loadTikTokBtn">Share</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="drawer-view drawer-right" id="doodleDrawer">
+            <div class="drawer-close-header">
+                <h4 style="color:#5a2e38;">Doodle Pad</h4>
+                <button class="close-drawer-btn" onclick="closeAllDrawers()">Hide ×</button>
+            </div>
+            <div class="panel-block active" style="padding:15px;">
+                <canvas id="doodleCanvas" width="280" height="360"></canvas>
                 <div class="control-row"><button class="control-btn" id="clearCanvasBtn">Wipe Pad</button></div>
             </div>
+        </div>
 
-            <div class="panel-block" id="gamesSub">
-                <div class="sub-tab-menu" style="background: #fff; margin-bottom: 8px;">
+        <div class="drawer-view drawer-right" id="gamesDrawer">
+            <div class="drawer-close-header">
+                <h4 style="color:#5a2e38;">Arcade Game Deck</h4>
+                <button class="close-drawer-btn" onclick="closeAllDrawers()">Hide ×</button>
+            </div>
+            <div style="padding: 15px; flex:1; display:flex; flex-direction:column; width:100%;">
+                <div class="sub-tab-menu">
                     <button class="sub-tab-btn active" style="font-size:0.75rem;" onclick="switchActiveArcade('tictacLayout', this)">TicTacToe</button>
                     <button class="sub-tab-btn" style="font-size:0.75rem;" onclick="switchActiveArcade('connectLayout', this)">Connect 4 🟣</button>
                 </div>
@@ -178,41 +373,12 @@
                 </div>
             </div>
         </div>
+
     </div>
 
-    <div class="app-view" id="cinemaView">
-        <div class="countdown-banner">ANIDEA Cinema 📺</div>
-        <div class="cinema-wrapper">
-            <div class="sub-tab-menu">
-                <button class="sub-tab-btn active" id="ytTabBtn" onclick="switchCinemaMode('youtube')">🍿 YouTube</button>
-                <button class="sub-tab-btn" id="ttTabBtn" onclick="switchCinemaMode('tiktok')">📱 TikTok Feed</button>
-            </div>
-
-            <div id="youtubeMediaBlock" class="panel-block active">
-                <div class="video-screen"><div id="ytPlayer"></div></div>
-                <div class="cinema-input" style="margin-top:10px;">
-                    <input type="text" id="ytUrlInput" placeholder="Paste YouTube link...">
-                    <button class="control-btn" style="margin:0; width:70px;" id="loadVideoBtn">Load</button>
-                </div>
-            </div>
-
-            <div id="tiktokMediaBlock" class="panel-block">
-                <div class="tiktok-screen" id="tiktokPlayerContainer">
-                    <p style="color:#a496b8; font-size:0.85rem; text-align:center; padding:20px; font-weight:600;">No video loaded.<br>Paste a TikTok link below to sync your feed! ✨</p>
-                </div>
-                <div class="cinema-input" style="margin-top:10px;">
-                    <input type="text" id="ttUrlInput" placeholder="Paste TikTok Video Link...">
-                    <button class="control-btn" style="margin:0; width:70px;" id="loadTikTokBtn">Share</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="mobile-nav">
-        <button class="nav-item active" onclick="switchMobileView('leftView', this)">🎵<span>Radio</span></button>
-        <button class="nav-item" onclick="switchMobileView('centerView', this)">💬<span>Chat</span></button>
-        <button class="nav-item" onclick="switchMobileView('rightView', this)">🕹️<span>Play</span></button>
-        <button class="nav-item" onclick="switchMobileView('cinemaView', this)">📺<span>Cinema</span></button>
+    <div class="side-trigger-deck" id="rightTriggerDeck">
+        <button class="deck-btn" onclick="toggleDrawer('doodleDrawer', this)">🎨</button>
+        <button class="deck-btn" onclick="toggleDrawer('gamesDrawer', this)">🕹️</button>
     </div>
 
     <script>
@@ -223,66 +389,261 @@
         const emojiToggleBtn = document.getElementById('emojiToggleBtn');
         const emojiPicker = document.getElementById('emojiPicker');
         const statusText = document.getElementById('connection-status');
-
         let myRole = '';
 
-        socket.on('assign-roles', (data) => {
-            myRole = data.role;
-            resetGamesToInitialState();
-        });
+        socket.on('assign-roles', (data) => { myRole = data.role; resetGamesToInitialState(); });
 
-        // --- 📅 COUNTER ---
-        const startDate = new Date(2025, 5, 17, 0, 0, 0);
+        // --- 📅 RELATIONAL CLOCK & TRUE MIDNIGHT PRODUCTION TARGET ---
+        const startDate = new Date(2025, 5, 17, 0, 0, 0); // June 17, 2025
+        
+        // TARGETING EXACTLY 12:00:00 AM MIDNIGHT ON JUNE 17, 2026 FOR PRODUCTION DEPLOYMENT
+        const anniversaryTarget = new Date(2026, 5, 17, 0, 0, 0); 
+        let celebrationTriggered = false;
+        let animationFrameId = null;
+
+        // Native Browser Sound Engine (Synthesizes sound effects seamlessly)
+        let audioCtx = null;
+        function playSynthSound(freq, type, duration, vol) {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                
+                let osc = audioCtx.createOscillator();
+                let gainNode = audioCtx.createGain();
+                
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                if (type === 'sine') {
+                    // Exploding sparkle crackle downward pitch sweep
+                    osc.frequency.exponentialRampToValueAtTime(40, audioCtx.currentTime + duration);
+                }
+                
+                gainNode.gain.setValueAtTime(vol, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+                
+                osc.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) { console.log("Audio waiting for touch gesture"); }
+        }
+
         function updateClock() {
-            const now = new Date();
+            const now = new Date(); 
             const diff = Math.abs(now - startDate);
+            
             const days = Math.floor(diff / (1000 * 60 * 60 * 24));
             const hrs = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            document.getElementById('anniversaryClock').textContent = `Together for: ${days} Days, ${hrs}h, and ${mins}m ♡`;
+            const secs = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            document.getElementById('anniversaryClock').textContent = `Together for: ${days} Days, ${hrs}h, ${mins}m, and ${secs}s ♡`;
+            
+            // Check true target milestone
+            if (now >= anniversaryTarget && !celebrationTriggered) {
+                triggerAnniversaryCelebration(days);
+            }
         }
-        setInterval(updateClock, 1000); updateClock();
+        setInterval(updateClock, 1000); 
+        updateClock();
 
-        // Responsive Switching logic
-        function switchMobileView(vId, btn) { document.querySelectorAll('.app-view').forEach(v=>v.classList.remove('mobile-visible')); document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active')); document.getElementById(vId).classList.add('mobile-visible'); btn.classList.add('active'); }
-        function switchRightFeature(sId, btn) { document.querySelectorAll('#rightView .panel-block').forEach(p=>p.classList.remove('active')); document.querySelectorAll('#rightView .sub-tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(sId).classList.add('active'); btn.classList.add('active'); }
-        function switchActiveArcade(lId, btn) { document.getElementById('gamesSub').querySelectorAll('.panel-block').forEach(p=>p.classList.remove('active')); btn.parentNode.querySelectorAll('.sub-tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(lId).classList.add('active'); btn.classList.add('active'); }
+        function triggerAnniversaryCelebration(totalDays) {
+            celebrationTriggered = true;
+            document.getElementById('celebrationSubtitle').textContent = `Beautiful ${totalDays} Days Together ♡`;
+            
+            const overlay = document.getElementById('celebrationOverlay');
+            overlay.classList.add('visible');
+            
+            // Initialize sound context on execution block
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            
+            // Start the energetic fireworks engine
+            startFireworksEngine();
 
+            // EXTENDED 15-SECOND PRODUCTION CELEBRATION
+            setTimeout(() => {
+                overlay.classList.remove('visible');
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                }
+            }, 15000); // 15000 milliseconds = 15 seconds
+        }
+
+        // --- 🎆 HIGH VISUAL VISUAL DENSITY FIREWORKS SYNTHESIS ---
+        function startFireworksEngine() {
+            const canvas = document.getElementById('fireworksCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            let fireworks = [];
+            let particles = [];
+
+            class Firework {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = canvas.height;
+                    this.targetY = Math.random() * (canvas.height * 0.45) + canvas.height * 0.08;
+                    this.speed = Math.random() * 4 + 9;
+                    this.angle = Math.atan2(this.targetY - this.y, Math.random() * canvas.width - this.x);
+                    this.hue = Math.random() * 360;
+                    // Play ascending launch whistle sound
+                    playSynthSound(180 + Math.random()*200, 'triangle', 0.4, 0.08);
+                }
+                update(index) {
+                    this.x += Math.cos(this.angle) * this.speed;
+                    this.y += Math.sin(this.angle) * this.speed;
+                    if (this.y <= this.targetY + 15) {
+                        createExplosion(this.x, this.y, this.hue);
+                        fireworks.splice(index, 1);
+                    }
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, 4.5, 0, Math.PI * 2);
+                    ctx.fillStyle = `hsl(${this.hue}, 100%, 80%)`;
+                    ctx.fill();
+                }
+            }
+
+            class Particle {
+                constructor(x, y, hue, isRing = false) {
+                    this.x = x;
+                    this.y = y;
+                    this.angle = Math.random() * Math.PI * 2;
+                    this.speed = isRing ? (Math.random() * 2 + 6) : (Math.random() * 9 + 3);
+                    this.friction = isRing ? 0.95 : 0.92;
+                    this.gravity = 0.18;
+                    this.hue = hue + (Math.random() * 60 - 30);
+                    this.alpha = 1;
+                    this.decay = Math.random() * 0.015 + 0.012; // Shimmer stays on screen longer
+                }
+                update(index) {
+                    this.speed *= this.friction;
+                    this.x += Math.cos(this.angle) * this.speed;
+                    this.y += Math.sin(this.angle) * this.speed + this.gravity;
+                    this.alpha -= this.decay;
+                    if (this.alpha <= 0) {
+                        particles.splice(index, 1);
+                    }
+                }
+                draw() {
+                    ctx.save();
+                    ctx.globalCompositeOperation = 'screen';
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, Math.random() * 3 + 1.5, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(${hslToRgb(this.hue, 100, 65)}, ${this.alpha})`;
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = `hsl(${this.hue}, 100%, 50%)`;
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+
+            function createExplosion(x, y, hue) {
+                let normalBurst = 90;
+                let ringBurst = 40;
+                
+                // Trigger deep explosion bass pop sound effect
+                playSynthSound(70 + Math.random()*40, 'sine', 0.6, 0.25);
+                // Trigger secondary high pitch crackle shimmer sound effect
+                setTimeout(() => playSynthSound(800 + Math.random()*600, 'square', 0.15, 0.03), 80);
+
+                for (let i = 0; i < normalBurst; i++) {
+                    particles.push(new Particle(x, y, hue, false));
+                }
+                for (let i = 0; i < ringBurst; i++) {
+                    particles.push(new Particle(x, y, hue + 120, true)); // Neon offset ring
+                }
+            }
+
+            function hslToRgb(h, s, l) {
+                h /= 360; s /= 100; l /= 100;
+                let r, g, b;
+                if (s === 0) { r = g = b = l; } else {
+                    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                    const p = 2 * l - q;
+                    const hue2rgb = (p, q, t) => {
+                        if (t < 0) t += 1; if (t > 1) t -= 1;
+                        if (t < 1/6) return p + (q - p) * 6 * t;
+                        if (t < 1/2) return q;
+                        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                        return p;
+                    };
+                    r = hue2rgb(p, q, h + 1/3); g = hue2rgb(p, q, h); b = hue2rgb(p, q, h - 1/3);
+                }
+                return `${Math.round(r * 255)}, ${Math.round(g * 255)}, ${Math.round(b * 255)}`;
+            }
+
+            function loop() {
+                animationFrameId = requestAnimationFrame(loop);
+                ctx.fillStyle = 'rgba(8, 4, 20, 0.22)'; // Enhanced trailing fade lines
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                if (Math.random() < 0.15) {
+                    fireworks.push(new Firework());
+                }
+
+                let i = fireworks.length;
+                while (i--) { fireworks[i].draw(); fireworks[i].update(i); }
+
+                let j = particles.length;
+                while (j--) { particles[j].draw(); particles[j].update(j); }
+            }
+            loop();
+        }
+
+        // --- 🧭 EXPANSION DRAWER LOGIC ---
+        function toggleDrawer(dId, btn) {
+            const element = document.getElementById(dId);
+            const isOpen = element.classList.contains('open');
+            closeAllDrawers();
+            if(!isOpen) {
+                element.classList.add('open');
+                btn.classList.add('active');
+            }
+        }
+        function closeAllDrawers() {
+            document.querySelectorAll('.drawer-view').forEach(d => d.classList.remove('open'));
+            document.querySelectorAll('.deck-btn').forEach(b => b.classList.remove('active'));
+        }
+        function switchActiveArcade(lId, btn) {
+            document.getElementById('gamesDrawer').querySelectorAll('.panel-block').forEach(p=>p.classList.remove('active'));
+            btn.parentNode.querySelectorAll('.sub-tab-btn').forEach(b=>b.classList.remove('active'));
+            document.getElementById(lId).classList.add('active'); btn.classList.add('active');
+        }
         function switchCinemaMode(mode) {
             document.getElementById('youtubeMediaBlock').classList.remove('active');
             document.getElementById('tiktokMediaBlock').classList.remove('active');
             document.getElementById('ytTabBtn').classList.remove('active');
             document.getElementById('ttTabBtn').classList.remove('active');
-
             if(mode === 'youtube') {
-                document.getElementById('youtubeMediaBlock').classList.add('active');
-                document.getElementById('ytTabBtn').classList.add('active');
+                document.getElementById('youtubeMediaBlock').classList.add('active'); document.getElementById('ytTabBtn').classList.add('active');
             } else {
-                document.getElementById('tiktokMediaBlock').classList.add('active');
-                document.getElementById('ttTabBtn').classList.add('active');
+                document.getElementById('tiktokMediaBlock').classList.add('active'); document.getElementById('ttTabBtn').classList.add('active');
             }
         }
 
-        // --- 🎨 LOCAL RADIAL COORDINATE DOODLE ENGINE ---
-        const canvas = document.getElementById('doodleCanvas');
-        const ctx = canvas.getContext('2d');
-        let drawing = false;
-        ctx.strokeStyle = '#b24eff'; ctx.lineWidth = 4; ctx.lineCap = 'round';
-
+        // --- 🎨 CANVAS SYNC ENGINE ---
+        const canvas = document.getElementById('doodleCanvas'); const ctx = canvas.getContext('2d');
+        let drawing = false; ctx.strokeStyle = '#ff4081'; ctx.lineWidth = 4; ctx.lineCap = 'round';
         function getCoords(e) {
             const rect = canvas.getBoundingClientRect();
             const clientX = e.touches ? e.touches[0].clientX : e.clientX;
             const clientY = e.touches ? e.touches[0].clientY : e.clientY;
             return { x: clientX - rect.left, y: clientY - rect.top };
         }
-
         canvas.addEventListener('mousedown', (e) => {
-            drawing = true; const p = getCoords(e);
-            ctx.beginPath(); ctx.moveTo(p.x, p.y); socket.emit('start-drawing', p);
+            drawing = true; const p = getCoords(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); socket.emit('start-drawing', p);
         });
         canvas.addEventListener('mousemove', (e) => {
-            if (!drawing) return; e.preventDefault();
-            const p = getCoords(e); ctx.lineTo(p.x, p.y); ctx.stroke(); socket.emit('drawing', p);
+            if (!drawing) return; e.preventDefault(); const p = getCoords(e); ctx.lineTo(p.x, p.y); ctx.stroke(); socket.emit('drawing', p);
         });
         canvas.addEventListener('mouseup', () => drawing = false);
         canvas.addEventListener('touchstart', (e) => {
@@ -298,65 +659,43 @@
         document.getElementById('clearCanvasBtn').addEventListener('click', () => socket.emit('clear-canvas'));
         socket.on('clear-canvas', () => ctx.clearRect(0, 0, canvas.width, canvas.height));
 
-        // --- 🎮 SYNCED TIC TAC TOE ---
-        const cells = document.querySelectorAll('.cell');
-        const gameStatus = document.getElementById('gameStatus');
-        let tttBoard = ["", "", "", "", "", "", "", "", ""];
-        let currentTTTTurn = 'creator';
-
+        // --- 🎮 TICK TAC TOE ---
+        const cells = document.querySelectorAll('.cell'); const gameStatus = document.getElementById('gameStatus');
+        let tttBoard = ["", "", "", "", "", "", "", "", ""]; let currentTTTTurn = 'creator';
         cells.forEach(cell => {
             cell.addEventListener('click', () => {
                 const idx = cell.getAttribute('data-index');
                 if (currentTTTTurn !== myRole || tttBoard[idx] !== "") return;
-                const sign = myRole === 'creator' ? 'X' : 'O';
-                executeTTTMove(idx, sign);
-                socket.emit('game-move', { idx, sign });
+                const sign = myRole === 'creator' ? 'X' : 'O'; executeTTTMove(idx, sign); socket.emit('game-move', { idx, sign });
             });
         });
-
         function executeTTTMove(idx, sign) {
-            tttBoard[idx] = sign; cells[idx].textContent = sign;
-            currentTTTTurn = currentTTTTurn === 'creator' ? 'joiner' : 'creator';
+            tttBoard[idx] = sign; cells[idx].textContent = sign; currentTTTTurn = currentTTTTurn === 'creator' ? 'joiner' : 'creator';
             updateGameStatusTexts(); checkTTTWin();
         }
         socket.on('game-move', (data) => { executeTTTMove(data.idx, data.sign); });
         document.getElementById('resetGameBtn').addEventListener('click', () => socket.emit('game-reset'));
         socket.on('game-reset', () => { tttBoard.fill(""); cells.forEach(c => c.textContent = ""); currentTTTTurn = 'creator'; updateGameStatusTexts(); });
 
-        // --- 🟣 SYNCED CONNECT 4 ---
-        const c4Grid = document.getElementById('c4Grid');
-        const c4Status = document.getElementById('c4Status');
-        let c4Board = Array(6).fill().map(() => Array(7).fill(""));
-        let currentC4Turn = 'creator';
-
+        // --- 🟣 CONNECT 4 ---
+        const c4Grid = document.getElementById('c4Grid'); const c4Status = document.getElementById('c4Status');
+        let c4Board = Array(6).fill().map(() => Array(7).fill("")); let currentC4Turn = 'creator';
         function renderC4() {
             c4Grid.innerHTML = "";
             for (let r = 0; r < 6; r++) {
                 for (let c = 0; c < 7; c++) {
                     const s = document.createElement('div'); s.classList.add('c4-slot');
-                    if (c4Board[r][c] === 'R') s.classList.add('p1');
-                    if (c4Board[r][c] === 'Y') s.classList.add('p2');
-                    s.addEventListener('click', () => handleC4ColumnClick(c));
-                    c4Grid.appendChild(s);
+                    if (c4Board[r][c] === 'R') s.classList.add('p1'); if (c4Board[r][c] === 'Y') s.classList.add('p2');
+                    s.addEventListener('click', () => handleC4ColumnClick(c)); c4Grid.appendChild(s);
                 }
             }
         }
-
         function handleC4ColumnClick(col) {
             if (currentC4Turn !== myRole) return;
-            for (let r = 5; r >= 0; r--) {
-                if (c4Board[r][col] === "") {
-                    const color = myRole === 'creator' ? 'R' : 'Y';
-                    executeC4Move(r, col, color); socket.emit('c4-move', { r, col, color });
-                    break;
-                }
-            }
+            for (let r = 5; r >= 0; r--) { if (c4Board[r][col] === "") { const color = myRole === 'creator' ? 'R' : 'Y'; executeC4Move(r, col, color); socket.emit('c4-move', { r, col, color }); break; } }
         }
-
         function executeC4Move(r, col, color) {
-            c4Board[r][col] = color; renderC4();
-            currentC4Turn = currentC4Turn === 'creator' ? 'joiner' : 'creator';
-            updateGameStatusTexts(); checkC4Win();
+            c4Board[r][col] = color; renderC4(); currentC4Turn = currentC4Turn === 'creator' ? 'joiner' : 'creator'; updateGameStatusTexts(); checkC4Win();
         }
         socket.on('c4-move', (data) => { executeC4Move(data.r, data.col, data.color); });
         document.getElementById('resetC4Btn').addEventListener('click', () => socket.emit('c4-reset'));
@@ -368,8 +707,7 @@
         }
         function resetGamesToInitialState() {
             tttBoard.fill(""); cells.forEach(c => c.textContent = ""); currentTTTTurn = 'creator';
-            c4Board = Array(6).fill().map(() => Array(7).fill("")); renderC4(); currentC4Turn = 'creator';
-            updateGameStatusTexts();
+            c4Board = Array(6).fill().map(() => Array(7).fill("")); renderC4(); currentC4Turn = 'creator'; updateGameStatusTexts();
         }
         function checkTTTWin() {
             const pat = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
@@ -383,7 +721,7 @@
         }
         function declareC4W(color) { c4Status.textContent = (color === 'R' ? 'creator' : 'joiner') === myRole ? "You Win! 🏆" : "They Won! 💕"; currentC4Turn = 'game-over'; }
 
-        // --- 📺 YOUTUBE RUNTIMES ---
+        // --- 📺 YOUTUBE CONTROLS ---
         let player; let ignoreNextSync = false;
         function onYouTubeIframeAPIReady() {
             player = new YT.Player('ytPlayer', { height: '100%', width: '100%', videoId: 'dQw4w9WgXcQ', playerVars: { 'playsinline': 1, 'controls': 1 }, events: { 'onStateChange': onPlayerStateChange } });
@@ -399,44 +737,37 @@
             if (e.data == YT.PlayerState.PAUSED) socket.emit('cinema-control', { type: 'youtube', action: 'pause', time: player.getCurrentTime() });
         }
 
-        // --- 📱 TIKTOK RUNTIMES ---
+        // --- 📱 TIKTOK CONTROLS ---
         document.getElementById('loadTikTokBtn').addEventListener('click', () => {
             const url = document.getElementById('ttUrlInput').value.trim(); if(!url) return;
-            const videoId = extractTikTokId(url);
-            if(videoId) { renderTikTokEmbed(videoId); socket.emit('cinema-control', { type: 'tiktok', id: videoId }); }
+            const videoId = url.match(/\/video\/(\d+)/) || url.match(/v\/(\d+)/) || url.match(/tiktok\.com\/@[\w\.-]+\/video\/(\d+)/);
+            if(videoId && videoId[1]) { renderTikTokEmbed(videoId[1]); socket.emit('cinema-control', { type: 'tiktok', id: videoId[1] }); }
         });
-        function extractTikTokId(url) {
-            const matches = url.match(/\/video\/(\d+)/) || url.match(/v\/(\d+)/); if(matches && matches[1]) return matches[1];
-            const shortMatch = url.match(/tiktok\.com\/@[\w\.-]+\/video\/(\d+)/); return shortMatch ? shortMatch[1] : null;
-        }
         function renderTikTokEmbed(videoId) {
             const container = document.getElementById('tiktokPlayerContainer');
-            container.innerHTML = `<blockquote class="tiktok-embed" data-video-id="${videoId}" style="max-width: 325px; min-width: 288px; margin:0 auto;"><section><a target="_blank" href="https://www.tiktok.com/video/${videoId}">Loading shared link...</a></section></blockquote>`;
+            container.innerHTML = `<blockquote class="tiktok-embed" data-video-id="${videoId}" style="max-width: 325px; min-width: 288px; margin:0 auto;"><section><a target="_blank" href="https://www.tiktok.com/video/${videoId}">Loading stream...</a></section></blockquote>`;
             if (window.tiktokEmbed) window.tiktokEmbed.render();
         }
 
-        // Cinema Decode Nodes
         socket.on('cinema-control', (data) => {
             if(data.type === 'youtube') {
-                switchCinemaMode('youtube'); ignoreNextSync = true;
+                ignoreNextSync = true; toggleDrawer('cinemaDrawer', document.querySelector('[onclick*="cinemaDrawer"]')); switchCinemaMode('youtube');
                 if (data.action === 'load') player.loadVideoById(data.id);
                 if (data.action === 'play') { player.seekTo(data.time, true); player.playVideo(); }
                 if (data.action === 'pause') { player.seekTo(data.time, true); player.pauseVideo(); }
             } else if (data.type === 'tiktok') {
-                switchCinemaMode('tiktok'); renderTikTokEmbed(data.id);
+                toggleDrawer('cinemaDrawer', document.querySelector('[onclick*="cinemaDrawer"]')); switchCinemaMode('tiktok'); renderTikTokEmbed(data.id);
             }
         });
 
-        // --- CORE CHAT ROUTERS ---
-        socket.on('connect', () => { statusText.textContent = "Line Active"; statusText.style.color="#b24eff"; });
+        // --- CORE CHAT ROUTING ---
+        socket.on('connect', () => { statusText.textContent = "Line Active"; statusText.style.color="#ff4081"; });
         function sendText() {
             const text = messageInput.value.trim(); if (!text) return;
-            socket.emit('chat-message', { type: 'text', text, id: socket.id });
-            messageInput.value = ''; emojiPicker.classList.remove('active');
+            socket.emit('chat-message', { type: 'text', text, id: socket.id }); messageInput.value = ''; emojiPicker.classList.remove('active');
         }
-        sendBtn.addEventListener('click', sendText);
-        messageInput.addEventListener('keypress', (e) => { if(e.key==='Enter') sendText(); });
-        emojiToggleBtn.addEventListener('click', () => emojiPicker.classList.toggle('active'));
+        sendBtn.addEventListener('click', sendText); messageInput.addEventListener('keypress', (e) => { if(e.key==='Enter') sendText(); });
+        emojiToggleBtn.addEventListener('click', () => emojiPicker.toggle('active'));
         emojiPicker.addEventListener('click', (e) => { if(e.target.tagName === 'SPAN') { socket.emit('chat-message', { type: 'sticker', text: e.target.textContent, id: socket.id }); emojiPicker.classList.remove('active'); } });
         socket.on('chat-message', (data) => {
             const c = data.id === socket.id ? 'sent' : 'received'; const m = document.createElement('div'); m.classList.add('message', c);
