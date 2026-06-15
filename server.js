@@ -30,13 +30,11 @@ io.on('connection', (socket) => {
     socket.on('drawing', (data) => socket.broadcast.emit('drawing', data));
     socket.on('clear-canvas', () => io.emit('clear-canvas'));
     
-    // 🎮 Synced Game Move Nodes
     socket.on('game-move', (data) => socket.broadcast.emit('game-move', data));
     socket.on('game-reset', () => io.emit('game-reset'));
     socket.on('c4-move', (data) => socket.broadcast.emit('c4-move', data));
     socket.on('c4-reset', () => io.emit('c4-reset'));
 
-    // 📺 Media Channels (YouTube & TikTok)
     socket.on('cinema-control', (data) => {
         socket.broadcast.emit('cinema-control', data);
     });
@@ -48,5 +46,5 @@ io.on('connection', (socket) => {
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
-    console.log(`🍇 ANIDEA Engine live on http://localhost:${PORT}`);
+    console.log(`🍇 ANIDEA Engine live on Port ${PORT}`);
 });
